@@ -53,7 +53,10 @@ export const machine = createMachine<MachineContext, MachineState>(
         context.focusedIndex = -1;
       },
       setFocusedValue(context, e) {
-        context.value[context.focusedIndex] = e.value;
+        const eventValue: string = e.value;
+        const focusedValue = context.value[context.focusedIndex];
+        const nextValue = getNextValue(focusedValue, eventValue);
+        context.value[context.focusedIndex] = nextValue;
       },
       focusNextInput(context, e) {
         const nextIndex = Math.min(
@@ -98,3 +101,14 @@ export const machine = createMachine<MachineContext, MachineState>(
     },
   }
 );
+
+const getNextValue = (focusedValue: string, eventValue: string) => {
+  let nextValue = eventValue;
+
+  if (focusedValue[0] === eventValue[0]) {
+    nextValue = eventValue[1];
+  } else if (focusedValue[0] === eventValue[1]) {
+    nextValue = eventValue[0];
+  }
+  return nextValue;
+};

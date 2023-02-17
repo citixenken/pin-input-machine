@@ -19,6 +19,7 @@ function App() {
             <input
               data-part="input"
               key={idx}
+              maxLength={2}
               value={value[idx]}
               onChange={(e) => {
                 const { value } = e.target;
