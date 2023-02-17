@@ -33,7 +33,8 @@ function App() {
                 }
               }}
               onPaste={(e) => {
-                const value = e.clipboardData.getData("Text");
+                e.preventDefault();
+                const value = e.clipboardData.getData("Text").trim();
                 send({ type: "PASTE", value, idx });
               }}
             />
