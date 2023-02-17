@@ -14,7 +14,13 @@ type MachineState = {
 export const machine = createMachine<MachineContext, MachineState>(
   {
     id: "pin-input",
-    context: { value: [], focusedIndex: -1 },
+    context: {
+      value: Array.from<string>({ length: 4 }).fill(""),
+      focusedIndex: -1,
+    },
+    watch: {
+      focusedIndex: ["executeFocus"],
+    },
     initial: "idle",
     states: {
       idle: {
@@ -46,9 +52,31 @@ export const machine = createMachine<MachineContext, MachineState>(
       clearFocusedIndex(context) {
         context.focusedIndex = -1;
       },
-      //   setFocusedValue() {},
-      //   clearFocusedValue() {},
-      //   setPastedValue() {},
+      setFocusedValue(context, e) {
+        context.value[context.focusedIndex] = e.value;
+      },
+      focusNextInput(context, e) {
+        const nextIndex = Math.min(
+          context.focusedIndex + 1,
+          context.value.length - 1
+        );
+        context.focusedIndex = nextIndex;
+      },
+      executeFocus(context) {
+        const inputGroup = document.querySelector("[data-part=input-group]");
+        if (!inputGroup || context.focusedIndex === -1) return;
+
+        const inputElements = Array.from(
+          document.querySelectorAll<HTMLInputElement>("[data-part=input]")
+        );
+
+        const input = inputElements[context.focusedIndex];
+        input?.focus();
+      },
+      clearFocusedValue() {},
+      focusPrevInput() {},
+      setPastedValue() {},
+      focusLastEmptyInput() {},
     },
   }
 );
