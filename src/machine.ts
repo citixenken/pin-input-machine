@@ -71,10 +71,17 @@ export const machine = createMachine<MachineContext, MachineState>(
         );
 
         const input = inputElements[context.focusedIndex];
-        input?.focus();
+        requestAnimationFrame(() => {
+          input?.focus();
+        });
       },
-      clearFocusedValue() {},
-      focusPrevInput() {},
+      clearFocusedValue(context) {
+        context.value[context.focusedIndex] = "";
+      },
+      focusPrevInput(context) {
+        const prevIndex = Math.max(0, context.focusedIndex - 1);
+        context.focusedIndex = prevIndex;
+      },
       setPastedValue() {},
       focusLastEmptyInput() {},
     },

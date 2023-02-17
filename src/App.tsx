@@ -28,7 +28,7 @@ function App() {
               onBlur={() => send({ type: "BLUR" })}
               onKeyDown={(e) => {
                 const { key } = e;
-                if (key === "Escape") {
+                if (key === "Backspace") {
                   send({ type: "BACKSPACE", idx });
                 }
               }}
