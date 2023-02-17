@@ -40,6 +40,9 @@ export const machine = createMachine<MachineContext, MachineState>(
             target: "focused",
             actions: ["setFocusedIndex"],
           },
+          LABEL_CLICK: {
+            actions: ["focusFirstInput"],
+          },
         },
       },
       focused: {
@@ -59,6 +62,9 @@ export const machine = createMachine<MachineContext, MachineState>(
     actions: {
       setFocusedIndex(context, e) {
         context.focusedIndex = e.idx;
+      },
+      focusFirstInput(context) {
+        context.focusedIndex = 0;
       },
       clearFocusedIndex(context) {
         context.focusedIndex = -1;
