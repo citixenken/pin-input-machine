@@ -1,17 +1,17 @@
 import { createMachine } from "@zag-js/core";
 
-// state
-type MachineState = {
-  value: "idle" | "focused";
-};
-
 // context
 type MachineContext = {
   value: string[];
   focusedIndex: number;
 };
 
-const machine = createMachine<MachineContext, MachineState>({
+// state
+type MachineState = {
+  value: "idle" | "focused";
+};
+
+export const machine = createMachine<MachineContext, MachineState>({
   id: "pin-input",
   context: { value: [], focusedIndex: -1 },
   initial: "idle",
