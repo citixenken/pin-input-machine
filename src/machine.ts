@@ -4,6 +4,8 @@ import { createMachine } from "@zag-js/core";
 type MachineContext = {
   value: string[];
   focusedIndex: number;
+  readonly isCompleted: boolean;
+  onComplete?: (value: string[]) => void;
 };
 
 // state
@@ -17,9 +19,18 @@ export const machine = createMachine<MachineContext, MachineState>(
     context: {
       value: Array.from<string>({ length: 4 }).fill(""),
       focusedIndex: -1,
+      onComplete(value) {
+        console.log({ value });
+      },
+    },
+    computed: {
+      isCompleted(context) {
+        return context.value.every((value) => value !== "");
+      },
     },
     watch: {
       focusedIndex: ["executeFocus"],
+      isCompleted: ["invokeOnComplete"],
     },
     initial: "idle",
     states: {
@@ -97,6 +108,10 @@ export const machine = createMachine<MachineContext, MachineState>(
         const idx = context.value.findIndex((value) => value === "");
         const lastIdx = context.value.length - 1;
         context.focusedIndex = idx === -1 ? lastIdx : idx;
+      },
+      invokeOnComplete(context) {
+        if (!context.isCompleted) return;
+        context.onComplete?.(Array.from(context.value));
       },
     },
   }
